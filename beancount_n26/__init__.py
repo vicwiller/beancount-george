@@ -252,8 +252,15 @@ class N26Importer(importer.ImporterProtocol):
                     amount_eur = Decimal(line[s_amount_eur])
                     amount_foreign = Decimal(line[s_amount_foreign_currency])
                     currency = line[s_type_foreign_currency]
+                    try:
+                        fees = amount_eur + abs(amount_foreign / exchange_rate)
+                    except ZeroDivisionError:
+                        print("############")
+                        print(line)
+                        print("############")
+                        print(exchange_rate)
+                        fees = 0
 
-                    fees = amount_eur + abs(amount_foreign / exchange_rate)
 
                     if fees != 0:
                         assert (
