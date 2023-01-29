@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "beancount-n26"
+name = "beancount-george"
 version = "0.8.0"
-description = "Beancount Importer for N26 CSV exports"
+description = "Beancount Importer for george CSV exports"
 readme = "README.md"
 authors = ["Siddhant Goel <me@sgoel.dev>"]
 license = "MIT"
@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Office/Business :: Financial :: Accounting",
 ]
 include = ["README.md", "LICENSE.txt"]
-repository = "https://github.com/siddhantgoel/beancount-n26"
+repository = "https://github.com/siddhantgoel/beancount-george"
 keywords = ["banking", "beancount", "cli-accounting", "finance"]
 
 [tool.poetry.dependencies]

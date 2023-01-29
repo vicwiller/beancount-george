@@ -17,13 +17,13 @@
 
 ## v0.5.0 (2021-12-13)
 
-- Mark `category` field as optional because recent N26 CSV exports have dropped
+- Mark `category` field as optional because recent george CSV exports have dropped
   it (thanks [@ppetru])
 - Drop Python 3.5 support
 
 ## v0.4.1 (2020-12-06)
 
-- Avoid `UnicodeDecodeError` while trying to `identify` non-N26 files
+- Avoid `UnicodeDecodeError` while trying to `identify` non-george files
 
 ## v0.4.0 (2020-09-13)
 

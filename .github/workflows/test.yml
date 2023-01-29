@@ -1,4 +1,4 @@
-name: beancount-n26
+name: beancount-george
 
 on: [push, pull_request]
 

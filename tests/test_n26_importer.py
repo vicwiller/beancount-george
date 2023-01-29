@@ -8,7 +8,7 @@ import pytest
 
 from typing import Optional, List, Tuple
 
-from beancount_n26 import _header_values_for, N26Importer, HEADER_FIELDS
+from beancount_george import _header_values_for, georgeImporter, HEADER_FIELDS
 
 IBAN_NUMBER = 'DE99 9999 9999 9999 9999 99'.replace(' ', '')
 
@@ -36,9 +36,9 @@ def filename(tmp_path):
 
 @pytest.fixture
 def importer(language):
-    return N26Importer(
+    return georgeImporter(
         IBAN_NUMBER,
-        'Assets:N26',
+        'Assets:george',
         language=language,
         exchange_fees_account='Expenses:TransferWise',
     )
@@ -46,9 +46,9 @@ def importer(language):
 
 @pytest.fixture
 def importer_with_classification(language):
-    return N26Importer(
+    return georgeImporter(
         IBAN_NUMBER,
-        "Assets:N26",
+        "Assets:george",
         language=language,
         account_patterns={
             "Expenses:Misc": [
@@ -158,7 +158,7 @@ def test_extract_single_transaction(importer, filename):
         payee='Muster GmbH',
         narration='Muster payment',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-12.34')),
+            ('Assets:george', 'EUR', Decimal('-12.34')),
         ],
     )
 
@@ -190,7 +190,7 @@ def test_extract_multiple_transactions(importer, filename):
         payee='MAX MUSTERMANN',
         narration='Muster GmbH',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-56.78')),
+            ('Assets:george', 'EUR', Decimal('-56.78')),
         ],
     )
 
@@ -200,7 +200,7 @@ def test_extract_multiple_transactions(importer, filename):
         payee='Muster SARL',
         narration='Muster Fr payment',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-42.24')),
+            ('Assets:george', 'EUR', Decimal('-42.24')),
         ],
     )
 
@@ -210,7 +210,7 @@ def test_extract_multiple_transactions(importer, filename):
         payee='Muster GmbH',
         narration='Muster De payment',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-12.34')),
+            ('Assets:george', 'EUR', Decimal('-12.34')),
         ],
     )
 
@@ -244,7 +244,7 @@ def test_extract_multiple_transactions_with_classification(
         payee='MAX MUSTERMANN',
         narration='Muster GmbH',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-56.78')),
+            ('Assets:george', 'EUR', Decimal('-56.78')),
             ('Expenses:Misc', None, None),
         ],
     )
@@ -255,7 +255,7 @@ def test_extract_multiple_transactions_with_classification(
         payee='Muster SARL',
         narration='Muster Fr payment',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-42.24')),
+            ('Assets:george', 'EUR', Decimal('-42.24')),
         ],
     )
 
@@ -265,16 +265,16 @@ def test_extract_multiple_transactions_with_classification(
         payee='Muster GmbH',
         narration='Muster De payment',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-12.34')),
+            ('Assets:george', 'EUR', Decimal('-12.34')),
         ],
     )
 
 
 def test_raise_on_payee_in_multiple_accounts(language):
     with pytest.raises(AssertionError):
-        N26Importer(
+        georgeImporter(
             IBAN_NUMBER,
-            "Assets:N26",
+            "Assets:george",
             language=language,
             account_patterns={
                 "Expenses:Misc": [
@@ -315,7 +315,7 @@ def test_extract_conversion(importer, filename):
         payee='Alice',
         narration='Muster GmbH',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('56.78')),
+            ('Assets:george', 'EUR', Decimal('56.78')),
         ],
     )
 
@@ -325,7 +325,7 @@ def test_extract_conversion(importer, filename):
         payee='Bob',
         narration='Home food',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('-42.0')),
+            ('Assets:george', 'EUR', Decimal('-42.0')),
         ],
     )
 
@@ -335,14 +335,14 @@ def test_extract_conversion(importer, filename):
         payee='Charlie',
         narration='Foreign food',
         postings=[
-            ('Assets:N26', 'EUR', Decimal('0.574997419221637245793331269')),
+            ('Assets:george', 'EUR', Decimal('0.574997419221637245793331269')),
             (
                 'Expenses:TransferWise',
                 'EUR',
                 Decimal('-0.574997419221637245793331269'),
             ),
             (
-                'Assets:N26',
+                'Assets:george',
                 'EUR',
                 Decimal('-9.13') / Decimal('0.9687'),
                 ('CHF', Decimal('0.9687')),
@@ -357,7 +357,7 @@ def test_extract_conversion(importer, filename):
         narration='MasterCard Payment',
         postings=[
             (
-                'Assets:N26',
+                'Assets:george',
                 'EUR',
                 Decimal('-12.21') / Decimal('1'),
                 ('EUR', Decimal('1')),
