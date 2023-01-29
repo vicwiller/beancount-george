@@ -13,85 +13,30 @@ from beancount.core.position import CostSpec
 logger = __import__('logging').getLogger(__name__)
 
 HEADER_FIELDS = {
-    'en': OrderedDict(
-        {
-            'date': {'label': 'Date', 'optional': False},
-            'payee': {'label': 'Payee', 'optional': False},
-            'account_number': {'label': 'Account number', 'optional': False},
-            'transaction_type': {
-                'label': 'Transaction type',
-                'optional': False,
-            },
-            'payment_reference': {
-                'label': 'Payment reference',
-                'optional': False,
-            },
-            'category': {'label': 'Category', 'optional': True},
-            'amount_eur': {'label': 'Amount (EUR)', 'optional': False},
-            'amount_foreign_currency': {
-                'label': 'Amount (Foreign Currency)',
-                'optional': False,
-            },
-            'type_foreign_currency': {
-                'label': 'Type Foreign Currency',
-                'optional': False,
-            },
-            'exchange_rate': {'label': 'Exchange Rate', 'optional': False},
-        }
-    ),
     'de': OrderedDict(
         {
-            'date': {'label': 'Datum', 'optional': False},
-            'payee': {'label': 'Empfänger', 'optional': False},
-            'account_number': {'label': 'Kontonummer', 'optional': False},
-            'transaction_type': {
-                'label': 'Transaktionstyp',
-                'optional': False,
-            },
+            'date': {'label': 'Buchungsdatum', 'optional': False},
+            'payee': {'label': 'Partnername', 'optional': False},
+            'account_number': {'label': 'Partner IBAN', 'optional': False},
+            # 'transaction_type': {
+                # 'label': 'Transaktionstyp',
+                # 'optional': False,
+            # },
             'payment_reference': {
-                'label': 'Verwendungszweck',
+                'label': 'Buchungs-Info',
                 'optional': False,
             },
-            'category': {'label': 'Kategorie', 'optional': True},
-            'amount_eur': {'label': 'Betrag (EUR)', 'optional': False},
-            'amount_foreign_currency': {
-                'label': 'Betrag (Fremdwährung)',
-                'optional': False,
-            },
-            'type_foreign_currency': {
-                'label': 'Fremdwährung',
-                'optional': False,
-            },
-            'exchange_rate': {'label': 'Wechselkurs', 'optional': False},
-        }
-    ),
-    'fr': OrderedDict(
-        {
-            'date': {'label': 'Date', 'optional': False},
-            'payee': {'label': 'Bénéficiaire', 'optional': False},
-            'account_number': {'label': 'Numéro de compte', 'optional': False},
-            'transaction_type': {
-                'label': 'Type de transaction',
-                'optional': False,
-            },
-            'payment_reference': {
-                'label': 'Référence de paiement',
-                'optional': False,
-            },
-            'category': {'label': 'Catégorie', 'optional': True},
-            'amount_eur': {'label': 'Montant (EUR)', 'optional': False},
-            'amount_foreign_currency': {
-                'label': 'Montant (Devise étrangère)',
-                'optional': False,
-            },
-            'type_foreign_currency': {
-                'label': 'Sélectionnez la devise étrangère',
-                'optional': False,
-            },
-            'exchange_rate': {
-                'label': 'Taux de conversion',
-                'optional': False,
-            },
+            #'category': {'label': 'Kategorie', 'optional': True},
+            'amount_eur': {'label': 'Betrag', 'optional': False},
+            # 'amount_foreign_currency': {
+                # 'label': 'Betrag (Fremdwährung)',
+                # 'optional': False,
+            # },
+            # 'type_foreign_currency': {
+                # 'label': 'Fremdwährung',
+                # 'optional': False,
+            # },
+            #'exchange_rate': {'label': 'Wechselkurs', 'optional': False},
         }
     ),
 }
@@ -125,7 +70,7 @@ class InvalidFormatError(Exception):
 PayeePattern = namedtuple('PayeePattern', ['regex', 'account'])
 
 
-class N26Importer(importer.ImporterProtocol):
+class GeorgeImporter(importer.ImporterProtocol):
     def __init__(
         self,
         iban: str,
@@ -170,13 +115,13 @@ class N26Importer(importer.ImporterProtocol):
     def _translate(self, key):
         return self._translation_strings[key]
 
-    def _parse_date(self, entry, key='date'):
+    def _parse_date(self, entry, key='Buchungsdatum'):
         return datetime.strptime(
-            entry[self._translate(key)], '%Y-%m-%d'
+            entry[self._translate(key)], '%Y-%m-%d' 
         ).date()
 
     def name(self):
-        return 'N26 {}'.format(self.__class__.__name__)
+        return 'George {}'.format(self.__class__.__name__)
 
     def file_account(self, _):
         return self.account
